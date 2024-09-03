@@ -1,3 +1,56 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Define keyframes for fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply animation to message items */
+.message-enter {
+    animation: fadeIn 0.5s ease-out;
+}
+
+
+/* styles.css */
+@keyframes gradientAnimation {
+    0% {
+        background: linear-gradient(45deg, #ff6b6b, #f06595);
+    }
+    50% {
+        background: linear-gradient(45deg, #f06595, #ff6b6b);
+    }
+    100% {
+        background: linear-gradient(45deg, #ff6b6b, #f06595);
+    }
+}
+
+.chat-container {
+    animation: fadeInScaleUp 1s ease-out, gradientAnimation 10s ease infinite;
+}
+
+/* styles.css */
+@keyframes fadeInScaleUp {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.chat-container {
+    animation: fadeInScaleUp 1s ease-out;
+}
+

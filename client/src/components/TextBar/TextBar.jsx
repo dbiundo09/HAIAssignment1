@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
-function TextBar({ onUpdate }) {
+function TextBar({ onUpdate, disabled }) {
     const [inputValue, setInputValue] = useState("");
-    
+    const textareaRef = useRef(null);
+
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
@@ -15,23 +16,37 @@ function TextBar({ onUpdate }) {
     };
 
     const handleKeyPress = (event) => {
-        if (event.key === "Enter") {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault(); // Prevent new lines
             updateValue();
         }
     };
 
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = "auto";
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+    }, [inputValue]);
+
     return (
         <div className="flex w-full max-w-xl mx-auto">
-            <input
-                type="text"
+            <textarea
+                ref={textareaRef}
                 value={inputValue}
                 placeholder="Type here"
-                className="input input-bordered flex-1 m-2"
+                className={`textarea textarea-bordered m-2 resize-none overflow-hidden ${disabled ? 'bg-gray-200 cursor-not-allowed' : ''}`}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}
+                rows={1} // Start with a single row
+                disabled={disabled} // Disable textarea
             />
-            <button onClick={updateValue} className="btn btn-outline btn-success m-2">
-                Success
+            <button
+                onClick={updateValue}
+                className={`btn btn-outline btn-success m-2 ${disabled ? 'bg-gray-300 cursor-not-allowed' : ''}`}
+                disabled={disabled} // Disable button
+            >
+                Send
             </button>
         </div>
     );
