@@ -30,7 +30,7 @@ function TextBar({ onUpdate, disabled }) {
     }, [inputValue]);
 
     return (
-        <div className="flex w-full max-w-xl mx-auto">
+        <div className="flex items-center w-full max-w-xl mx-auto">
             <textarea
                 ref={textareaRef}
                 value={inputValue}
@@ -38,18 +38,19 @@ function TextBar({ onUpdate, disabled }) {
                 className={`textarea textarea-bordered m-2 resize-none overflow-hidden ${disabled ? 'bg-gray-200 cursor-not-allowed' : ''}`}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}
-                rows={1} // Start with a single row
-                disabled={disabled} // Disable textarea
+                rows={1}
+                disabled={disabled}
             />
             <button
                 onClick={updateValue}
                 className={`btn btn-outline btn-success m-2 ${disabled ? 'bg-gray-300 cursor-not-allowed' : ''}`}
-                disabled={disabled} // Disable button
+                disabled={disabled}
             >
                 Send
             </button>
         </div>
     );
+
 }
 
 export default TextBar;
