@@ -1,6 +1,8 @@
+const url = process.env.NODE_ENV === 'production' ? 'https://haiassignment1.onrender.com' : 'http://127.0.0.1:8000';
+
 export default async function promptGPT (prompt, datas) {
   try {
-    const response = await fetch("http://127.0.0.1:8000/generateChart", {
+    const response = await fetch(url + "/generateChart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
