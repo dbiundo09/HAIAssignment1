@@ -19,9 +19,8 @@ function ScrollableChat(props) {
     }, [messages]);
 
     useEffect(() => {
-        endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        endOfMessagesRef.current?.scrollIntoView({block: 'end' });
     }, [animatedMessages]);
-
     return (
         <div className="h-full overflow-y-auto p-2">
             <div className="space-y-2">

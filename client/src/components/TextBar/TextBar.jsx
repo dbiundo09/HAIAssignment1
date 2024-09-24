@@ -35,7 +35,7 @@ function TextBar({ onUpdate, disabled }) {
                 ref={textareaRef}
                 value={inputValue}
                 placeholder="Type here"
-                className={`textarea textarea-bordered m-2 resize-none overflow-hidden ${disabled ? 'bg-gray-200 cursor-not-allowed' : ''}`}
+                className={`w-full textarea textarea-bordered m-2 resize-none overflow-hidden ${disabled ? 'bg-gray-200 cursor-not-allowed' : ''}`}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}
                 rows={1}

@@ -23,7 +23,6 @@ function sendMessage(){
     }).then(response => {
         return response.json();
     }).then(data => {
-        console.log(data);
         responseText.textContent = data.response;
     });
 }

@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-print(os.getenv("OPENAI_API_KEY"))
 
 app = FastAPI()
 
@@ -35,32 +34,73 @@ client = OpenAI(
 # Define request and response models
 class QueryRequest(BaseModel):
     prompt: str
+    data: str = None
 
 class QueryResponse(BaseModel):
     response: str
 
 
 # Endpoint to interact with OpenAI API via LangChain
-@app.post("/query", response_model=QueryResponse)
-async def query_openai(request: QueryRequest):
+@app.post("/generateChart", response_model=QueryResponse)
+async def generate_chart(request: QueryRequest):
     try:
-        # Set your OpenAI API key
-        
 
+        # Set your OpenAI API key
+        prompt = f"""You are an AI Assistant. Here is some data:
+                    {request.data}
+
+                    Using this data, make a chart that pertains to the following user prompt. 
+                    
+
+                     If the following prompt is not relevant to the data, respond with a lowercase "no". Any prompt that is not specifically asking for a piece of data relevant to the chart should be responded to with a no. This includes casual conversation, asking about other data sets, etc. Otherwise, Return a string that can be directly parsed by JSON.parse() with no other informatino except the vega lite specs. Don't make the height or width greater than 400px.
+
+                     {request.prompt}
+                     """,
+        print(prompt)
         # Call the OpenAI API via LangChain
         chat_completion = client.chat.completions.create(
             messages=[
                 {
                     "role": "user",
-                    "content": "Say this is a test",
+                    "content": f"{prompt}",
                 }
             ],
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
         )
-
+        print(chat_completion)
         return QueryResponse(response=chat_completion.choices[0].message.content)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Endpoint to interact with OpenAI API via LangChain
+@app.post("/getDescription", response_model=QueryResponse)
+async def getDesc(request: QueryRequest):
+    try:
+        
+        # Set your OpenAI API key
+        prompt = f"""You are an AI Assistant. Here is a chart:
+
+                    Using this chart, generate a brief 1-2 sentence of what it represents. Keep it very simple, only describing what the graph does. 
+                    {request.prompt}
+
+                     """,
+        print(prompt)
+        # Call the OpenAI API via LangChain
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"{prompt}",
+                }
+            ],
+            model="gpt-4o-mini",
+        )
+        print(chat_completion)
+        return QueryResponse(response=chat_completion.choices[0].message.content)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 
 # Root endpoint
 @app.get("/")
