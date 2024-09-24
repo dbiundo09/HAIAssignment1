@@ -59,6 +59,7 @@ function Chat() {
     } catch (error) {
       console.error("Error in promptGPT:", error);
       setLoading(false);
+      return "error"
     }
   }
 
@@ -70,7 +71,10 @@ function Chat() {
       const newMessage = await getGPTMessage(t);
       if (!newMessage) {
         addMessage("That is not relevant to the dataset. Please ask for a data analysis or visualization task!", 0, false, false);
-      } else {
+      } else if (newMessage == "error") { 
+        addMessage("The AI provided an ill-formed response. Please try again.", 0, false, false);
+      }
+      else {
         addMessage(newMessage.message, 0, true, false);
         const description = await getDescription(newMessage.st, "");
         addMessage(description, 0, false, false);

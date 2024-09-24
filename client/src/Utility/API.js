@@ -22,6 +22,7 @@ export default async function promptGPT (prompt, datas) {
     if (cleanedResponse == "no") { 
       return null;
     }
+    console.log(cleanedResponse);
     return cleanedResponse; 
   } catch (error) {
     console.error("Error querying GPT:", error);
@@ -52,6 +53,7 @@ export  async function getDescription (prompt, datas) {
     if (cleanedResponse == "no") { 
       return null;
     }
+    console.log(cleanedResponse);
     return cleanedResponse; 
   } catch (error) {
     console.error("Error querying GPT:", error);
