@@ -52,7 +52,7 @@ async def generate_chart(request: QueryRequest):
                     Using this data, make a chart that pertains to the following user prompt. 
                     
 
-                     If the following prompt is not relevant to the data, respond with a lowercase "no". Any prompt that is not specifically asking for a piece of data relevant to the chart should be responded to with a no. This includes casual conversation, asking about other data sets, etc. Otherwise, Return a string that can be directly parsed by JSON.parse() with no other informatino except the vega lite specs. Don't make the height or width greater than 400px.
+                     If the following prompt is not relevant to the data, respond with a lowercase "no". Any prompt that is not specifically asking for a piece of data relevant to the chart should be responded to with a no. This includes casual conversation, asking about other data sets, etc. Otherwise, Return a string that can be directly parsed by JSON.parse() with no other informatino except the vega lite specs. Don't make the height or width greater than 400px. Only return one chart no matter what.
 
                      {request.prompt}
                      """,
