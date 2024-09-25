@@ -100,7 +100,7 @@ function Chat() {
         <CSVReader callback={setCurrData} />
       </div>
       <div className="flex-1 flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-3xl h-full max-h-[600px] overflow-y-auto bg-white shadow-lg rounded-lg p-4">
+        <div className="w-full max-w-3xl h-full max-h-[600px] overflow-y-auto bg-white shadow-lg rounded-lg p-4" style={{height: '70%'}}>
           <ScrollableChat messageArray={messages} loading={loading} />
         </div>
         <TextBar disabled={loading} onUpdate={onUpdate} />

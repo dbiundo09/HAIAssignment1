@@ -9,6 +9,7 @@ function TextBar({ onUpdate, disabled }) {
     };
 
     const updateValue = () => {
+        
         if (onUpdate) {
             onUpdate(inputValue);
         }

@@ -35,7 +35,7 @@ const CSVReader = ({ callback }) => {
         setPreviewData(parsedData.slice(0, 10));
         console.log(parsedData);
         setError(null);
-        callback(JSON.stringify(parsedData.slice(0, 30)));
+        callback(JSON.stringify(parsedData.slice(0, 20)));
       } catch (err) {
         console.log(err);
         setError("Error parsing CSV file.");

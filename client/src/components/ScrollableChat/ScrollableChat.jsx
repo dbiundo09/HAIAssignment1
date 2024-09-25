@@ -1,10 +1,3 @@
-// Accepts an array of messages in the following format:
-// {
-// TimeStamp: Timestamp of when message was sent
-// Render: JSX object that should be rendered on the screen
-// User: 1 or 0, 0 being self, 1 being the other
-// }
-// ScrollableChat.jsx
 import { useEffect, useRef, useState } from "react";
 import { sortMessagesByTimestamp } from "../../Utility/Util";
 
@@ -18,9 +11,18 @@ function ScrollableChat(props) {
         setAnimatedMessages(messages);
     }, [messages]);
 
+    // Scrolls the page to the bottom when new messages are added
     useEffect(() => {
-        endOfMessagesRef.current?.scrollIntoView({block: 'end' });
+        // Scroll the chat container
+        endOfMessagesRef.current?.scrollIntoView({ block: 'end' });
+
+        // Scroll the whole window to the bottom
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "smooth",
+        });
     }, [animatedMessages]);
+
     return (
         <div className="h-full overflow-y-auto p-2">
             <div className="space-y-2">
