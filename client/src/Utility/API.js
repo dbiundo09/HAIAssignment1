@@ -2,6 +2,7 @@ const url = process.env.NODE_ENV === 'production' ? 'https://haiassignment1.onre
 
 export default async function promptGPT (prompt, datas) {
   try {
+    console.log("Prompting GPT")
     const response = await fetch(url + "/generateChart", {
       method: "POST",
       headers: {
@@ -33,7 +34,8 @@ export default async function promptGPT (prompt, datas) {
 
 export  async function getDescription (prompt, datas) {
   try {
-    const response = await fetch("http://127.0.0.1:8000/getDescription", {
+    console.log("Getting description");
+    const response = await fetch(url + "/getDescription", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
