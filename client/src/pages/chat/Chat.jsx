@@ -12,10 +12,15 @@ function Chat() {
   const [loading, setLoading] = useState(false);
   const [currData, setCurrData] = useState();
 
+  const clearMessages = () => {
+    setMessages([]);
+    addMessage("Hi! I am your AI Assistant. Go ahead and ask me anything!", 0, false, false);
+  }
+
   const addMessage = async (t, user = 1, isChart = false, load = true) => {
-    const generateMessage = (text, user, hasBackground = true) => {
+    const generateMessage = (text, user, isChart = false) => {
       const time = new Date();
-      const retMessage = <Message hasBackground={hasBackground} message={text} key={time} user={user} timestamp={time} />;
+      const retMessage = <Message isChart={isChart} message={text} key={time} user={user} timestamp={time} />;
       return ({
         message: retMessage, timestamp: time, user: user
       });
@@ -27,7 +32,7 @@ function Chat() {
     if (isChart) {
       setMessages(prevMessages => [
         ...prevMessages,
-        generateMessage(t, user, false),
+        generateMessage(t, user, true),
       ]);
     } else {
       setMessages(prevMessages => [
@@ -39,8 +44,11 @@ function Chat() {
     setLoading(false);
   }
 
-  const getGPTMessage = async (t) => {
+  const getGPTMessage = async (t, currData) => {
     const generateChart = (spec, user) => {
+      if (!spec) { 
+        return null;
+      }
       const time = new Date();
       const retMessage = <VegaLite spec={spec} />;
       return ({
@@ -49,35 +57,43 @@ function Chat() {
     }
 
     try {
-      const response = await promptGPT(t, currData);
+      console.log("getting GPT Message");
+      var response = await promptGPT(t, currData);
+      response = JSON.parse(response);
       if (!response) {
         return null;
       }
       setLoading(false);
-      return generateChart(JSON.parse(response), 0);
+      console.log("JSON to Parse:", response.chart);
+      const returnDict = { "chart": generateChart(response["chart"], 0), 'analysis': response['analysis'] };
+      return returnDict
 
     } catch (error) {
-      console.error("Error in promptGPT:", error);
+      console.error("Error in getGPTMessage:", error);
       setLoading(false);
-      return "error"
+      return "error";
     }
   }
 
+  // Function that is called whenever the user clicks enter / submits a message
   const onUpdate = async (t) => {
     if (currData) {
       addMessage(t);
       setLoading(true); // Show typing indicator while AI is responding
 
-      const newMessage = await getGPTMessage(t);
+      const newMessage = await getGPTMessage(t, currData);
       if (!newMessage) {
         addMessage("That is not relevant to the dataset. Please ask for a data analysis or visualization task!", 0, false, false);
-      } else if (newMessage == "error") { 
+      } else if (newMessage == "error") {
         addMessage("The AI provided an ill-formed response. Please try again.", 0, false, false);
       }
       else {
-        addMessage(newMessage.message, 0, true, false);
-        const description = await getDescription(newMessage.st, "");
-        addMessage(description, 0, false, false);
+        console.log("Chart", newMessage.chart)
+        if (newMessage.chart && newMessage.chart.st && newMessage.chart.st !== "[]") {
+          addMessage(newMessage.chart.message, 0, true, false);
+        }
+
+        addMessage(newMessage['analysis'], 0, false, false);
       }
     } else {
       addMessage(t);
@@ -100,10 +116,10 @@ function Chat() {
         <CSVReader callback={setCurrData} />
       </div>
       <div className="flex-1 flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-3xl h-full max-h-[600px] overflow-y-auto bg-white shadow-lg rounded-lg p-4" style={{height: '70%'}}>
+        <div className="w-full max-w-3xl h-full max-h-[600px] overflow-y-auto bg-white shadow-lg rounded-lg p-4" style={{ height: '70%' }}>
           <ScrollableChat messageArray={messages} loading={loading} />
         </div>
-        <TextBar disabled={loading} onUpdate={onUpdate} />
+        <TextBar disabled={loading} onUpdate={onUpdate} clearMessages={clearMessages} />
       </div>
     </div>
   );

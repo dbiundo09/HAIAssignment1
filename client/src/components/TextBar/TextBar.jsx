@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-function TextBar({ onUpdate, disabled }) {
+function TextBar({ onUpdate, disabled, clearMessages }) {
     const [inputValue, setInputValue] = useState("");
     const textareaRef = useRef(null);
 
@@ -9,7 +9,7 @@ function TextBar({ onUpdate, disabled }) {
     };
 
     const updateValue = () => {
-        
+
         if (onUpdate) {
             onUpdate(inputValue);
         }
@@ -46,9 +46,15 @@ function TextBar({ onUpdate, disabled }) {
                 onClick={updateValue}
                 className={`btn btn-outline btn-success m-2 ${disabled ? 'bg-gray-300 cursor-not-allowed' : ''}`}
                 disabled={disabled}
-            >
-                Send
+            > Send
             </button>
+            <button
+                onClick={clearMessages}
+                className={`btn btn-outline btn-neutral m-2 ${disabled ? 'bg-gray-300 cursor-not-allowed' : ''}`}
+                disabled={disabled}
+            >Clear Messages</button>
+            
+
         </div>
     );
 

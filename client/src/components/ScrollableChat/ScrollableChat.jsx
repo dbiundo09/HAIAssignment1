@@ -11,16 +11,14 @@ function ScrollableChat(props) {
         setAnimatedMessages(messages);
     }, [messages]);
 
-    // Scrolls the page to the bottom when new messages are added
+    // Scrolls the chat container to the bottom when new messages are added
     useEffect(() => {
-        // Scroll the chat container
-        endOfMessagesRef.current?.scrollIntoView({ block: 'end' });
+        // Timeout to ensure the scroll occurs after the DOM updates
+        const timeoutId = setTimeout(() => {
+            endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 0);
 
-        // Scroll the whole window to the bottom
-        window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: "smooth",
-        });
+        return () => clearTimeout(timeoutId);
     }, [animatedMessages]);
 
     return (
